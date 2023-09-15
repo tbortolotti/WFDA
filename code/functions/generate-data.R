@@ -1,5 +1,4 @@
 generate_data <- function(seed,
-                          case=c("CASE-1", "CASE-2"),
                           reg.info,
                           case.info)
 {
@@ -13,27 +12,15 @@ generate_data <- function(seed,
   res            <- reg.info$res
   
   n.sim          <- case.info$n.sim
-  if(case=="CASE-1")
-  {
-    smooth.noise <- case.info$noise
-    perc.po      <- case.info$perc
-    left.bound   <- case.info$left.bound
-    right.bound  <- case.info$right.bound
-  } else if (case=="CASE-2"){
-    smooth.noise <- case.info$noise
-    ext.noise    <- case.info$ext.noise
-    perc.noise   <- case.info$perc
-    noise.bound  <- case.info$left.bound
-    right.bound  <- case.info$right.bound
-  }
+  perc.po        <- case.info$perc
+  left.bound     <- case.info$left.bound
+  right.bound    <- case.info$right.bound
   
   ## Sample the scalar covariate: x1
   K.fd <- xlist[[2]]
   K.val <- eval.fd(1, K.fd)
   mu1 <- mean(K.val)
   sd1 <- sd(K.val)
-  #x1 <- rnorm(n.sim, mu1, sd1)
-  #x1 <- rnorm(n.sim, 10*mu1, sd1)
   x1 <- rnorm(n.sim, 0, 2.5*sd1)
   
   ## Sample the functional covariate: x2
@@ -143,42 +130,40 @@ generate_data <- function(seed,
   
   ## Add the smoothing errors
   ## Add an iid error to the curves
+  smooth.noise   <- 0.1
   t.grid <- seq(range(t.points)[1], range(t.points)[2], 0.25)
   
-  if(case == "CASE-1")
+  ## CASE 1
+  ## Partially observed functional data
+  Ui <- runif(n.sim, min=left.bound,max=right.bound)
+  Pi <- rbinom(n.sim, size=1, prob=perc.po)
+  Pi.logic <- ifelse(Pi==1, TRUE, FALSE)
+  T_hp <- rep(right.bound, n.sim)
+  T_hp[Pi.logic] <- Ui[Pi.logic]
+  
+  y.noisy <- eval.fd(t.grid, y.fd)
+  for(i in 1:n.sim)
   {
-    ## CASE 1
-    ## Partially observed functional data
-    Ui <- runif(n.sim, min=left.bound,max=right.bound)
-    Pi <- rbinom(n.sim, size=1, prob=perc.po)
-    Pi.logic <- ifelse(Pi==1, TRUE, FALSE)
-    T_hp <- rep(right.bound, n.sim)
-    T_hp[Pi.logic] <- Ui[Pi.logic]
-    
-    y.noisy <- eval.fd(t.grid, y.fd)
-    for(i in 1:n.sim)
-    {
-      y.noisy[,i] <- y.noisy[,i] + rnorm(length(t.grid), 0, smooth.noise)
-    }
-    
-    y.no.noise <- eval.fd(t.grid, y.fd)
-    y.po <- y.noisy
-    for(i in 1:n.sim)
-    {
-      t.idx <- (t.grid>T_hp[i])
-      y.po[t.idx,i] <- NA
-    }
-    
-    
-    ## OUTPUT
-    out <- list(t.points        = t.grid,
-                T_hp            = T_hp,
-                curves          = y.po,
-                curves.true     = y.noisy,
-                curves.true.fd  = y.fd.nores,
-                curves.reg.fd   = y.fd,
-                xlist           = xlist.new)
-    return(out)
+    y.noisy[,i] <- y.noisy[,i] + rnorm(length(t.grid), 0, smooth.noise)
   }
+  
+  y.no.noise <- eval.fd(t.grid, y.fd)
+  y.po <- y.noisy
+  for(i in 1:n.sim)
+  {
+    t.idx <- (t.grid>T_hp[i])
+    y.po[t.idx,i] <- NA
+  }
+    
+    
+  ## OUTPUT
+  out <- list(t.points        = t.grid,
+              T_hp            = T_hp,
+              curves          = y.po,
+              curves.true     = y.noisy,
+              curves.true.fd  = y.fd.nores,
+              curves.reg.fd   = y.fd,
+              xlist           = xlist.new)
+  return(out)
   
 }
