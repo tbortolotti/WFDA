@@ -133,7 +133,6 @@ generate_data <- function(seed,
   smooth.noise   <- 0.1
   t.grid <- seq(range(t.points)[1], range(t.points)[2], 0.25)
   
-  ## CASE 1
   ## Partially observed functional data
   Ui <- runif(n.sim, min=left.bound,max=right.bound)
   Pi <- rbinom(n.sim, size=1, prob=perc.po)

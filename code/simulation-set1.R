@@ -24,12 +24,11 @@ cat("\014")
 ## Load Functions
 source('functions/weighted-analysis.R')
 source('functions/generate_data.R')
-load('Simulation/DATA/reg_info.RData')
+load('output/simulation/reg_info.RData')
 
 ## Simulation - SET 1 --------------------------------------------------------
 fix.par <- 10
 perc.po <- 4
-smooth.noise <- 10
 
 ## Set the case information
 case.info <- list(n.sim       = 101,
@@ -305,7 +304,7 @@ End.Time <- Sys.time()
 round(End.Time - Start.Time, 2)
 beep()
 
-name.file <- paste0('output/simulation/',method,'.RData')
+name.file <- paste0('output/simulation/',method,'_nowgts.RData')
 save(MSE, beta0.est, beta1.est, beta2.est, file=name.file)
 
 #### KL-PC, unweighted analysis -------------------------------------------------
@@ -462,7 +461,7 @@ method      <- rep(c("Kraus:wgt", "KL-PC:wgt", "KL-AL:wgt", "Kraus", "KL-PC", "K
 beta_mse   <- numeric(3*levs*B)
 
 {
-  load('Simulation/Results/repeated-simulations/Kraus.RData')
+  load('output/simulation/Kraus.RData')
   i <- 1 #index of the coefficient
   j <- 1 #index of the method
   idx.inf <- (levs*(i-1) + j-1)*B + 1
@@ -485,7 +484,7 @@ beta_mse   <- numeric(3*levs*B)
   beta.res <- beta2.est - beta2
   beta_mse[idxs] <- diag(inprod(beta.res, beta.res, 0, 0, rng=range(t.points)))
   
-  load('Simulation/Results/repeated-simulations/KLNoAl.RData')
+  load('output/simulation/KLNoAl.RData')
   i <- 1
   j <- 2
   idx.inf <- (levs*(i-1) + j-1)*B + 1
@@ -508,7 +507,7 @@ beta_mse   <- numeric(3*levs*B)
   beta.res <- beta2.est - beta2
   beta_mse[idxs] <- diag(inprod(beta.res, beta.res, 0, 0, rng=range(t.points)))
   
-  load('Simulation/Results/repeated-simulations/KLAl-par10.RData')
+  load('output/simulation/KLAl-par10.RData')
   i <- 1
   j <- 3
   idx.inf <- (levs*(i-1) + j-1)*B + 1
@@ -531,7 +530,7 @@ beta_mse   <- numeric(3*levs*B)
   beta.res <- beta2.est - beta2
   beta_mse[idxs] <- diag(inprod(beta.res, beta.res, 0, 0, rng=range(t.points)))
   
-  load('Simulation/Results/repeated-simulations/Kraus_nowgts.RData')
+  load('output/simulation/Kraus_nowgts.RData')
   i <- 1
   j <- 4
   idx.inf <- (levs*(i-1) + j-1)*B + 1
@@ -554,7 +553,7 @@ beta_mse   <- numeric(3*levs*B)
   beta.res <- beta2.est - beta2
   beta_mse[idxs] <- diag(inprod(beta.res, beta.res, 0, 0, rng=range(t.points)))
   
-  load('Simulation/Results/repeated-simulations/KLNoAl_nowgts.RData')
+  load('output/simulation/KLNoAl_nowgts.RData')
   i <- 1
   j <- 5
   idx.inf <- (levs*(i-1) + j-1)*B + 1
@@ -577,7 +576,7 @@ beta_mse   <- numeric(3*levs*B)
   beta.res <- beta2.est - beta2
   beta_mse[idxs] <- diag(inprod(beta.res, beta.res, 0, 0, rng=range(t.points)))
   
-  load('Simulation/Results/repeated-simulations/KLAl_nowgts.RData')
+  load('output/simulation/KLAl_nowgts.RData')
   i <- 1
   j <- 6
   idx.inf <- (levs*(i-1) + j-1)*B + 1
@@ -666,7 +665,7 @@ bias1.vec   <- numeric(levs)
 bias2.vec   <- numeric(levs)
 
 {
-  load('Simulation/Results/repeated-simulations/Kraus.RData')
+  load('output/simulation/Kraus.RData')
   i <- 1
   j <- 1
   idx.inf <- (levs*(i-1) + j-1)*B + 1
@@ -705,7 +704,7 @@ bias2.vec   <- numeric(levs)
   mean.diff <- mean0 - beta2
   bias2.vec[j] <- inprod(mean.diff, mean.diff, 0, 0, rng=range(t.points))
   
-  load('Simulation/Results/repeated-simulations/KLNoAl.RData')
+  load('output/simulation/KLNoAl.RData')
   i <- 1
   j <- 2
   idx.inf <- (levs*(i-1) + j-1)*B + 1
@@ -743,7 +742,7 @@ bias2.vec   <- numeric(levs)
   mean.diff <- mean0 - beta2
   bias2.vec[j] <- inprod(mean.diff, mean.diff, 0, 0, rng=range(t.points))
   
-  load('Simulation/Results/repeated-simulations/KLAl-par10.RData')
+  load('output/simulation/KLAl-par10.RData')
   i <- 1
   j <- 3
   idx.inf <- (levs*(i-1) + j-1)*B + 1
@@ -781,7 +780,7 @@ bias2.vec   <- numeric(levs)
   mean.diff <- mean0 - beta2
   bias2.vec[j] <- inprod(mean.diff, mean.diff, 0, 0, rng=range(t.points))
   
-  load('Simulation/Results/repeated-simulations/Kraus_nowgts.RData')
+  load('output/simulation/Kraus_nowgts.RData')
   i <- 1
   j <- 4
   idx.inf <- (levs*(i-1) + j-1)*B + 1
@@ -819,7 +818,7 @@ bias2.vec   <- numeric(levs)
   mean.diff <- mean0 - beta2
   bias2.vec[j] <- inprod(mean.diff, mean.diff, 0, 0, rng=range(t.points))
   
-  load('Simulation/Results/repeated-simulations/KLNoAl_nowgts.RData')
+  load('output/simulation/KLNoAl_nowgts.RData')
   i <- 1
   j <- 5
   idx.inf <- (levs*(i-1) + j-1)*B + 1
@@ -857,7 +856,7 @@ bias2.vec   <- numeric(levs)
   mean.diff <- mean0 - beta2
   bias2.vec[j] <- inprod(mean.diff, mean.diff, 0, 0, rng=range(t.points))
   
-  load('Simulation/Results/repeated-simulations/KLAl_nowgts.RData')
+  load('output/simulation/KLAl_nowgts.RData')
   i <- 1
   j <- 6
   idx.inf <- (levs*(i-1) + j-1)*B + 1
@@ -938,7 +937,7 @@ method      <- rep(c("Kraus:wgt", "KL-PC:wgt", "KL-AL:wgt", "Kraus", "KL-PC", "K
 bias2   <- numeric(3*levs)
 
 {
-  load('Simulation/Results/repeated-simulations/Kraus.RData')
+  load('output/simulation/Kraus.RData')
   i <- 1 #index of the coefficient
   j <- 1 #index of the method
   idx.inf <- (levs*(i-1) + j-1) + 1
@@ -964,7 +963,7 @@ bias2   <- numeric(3*levs)
   mean.diff <- mean0 - beta2
   bias2[idxs] <- inprod(mean.diff, mean.diff, 0, 0, rng=range(t.points))
   
-  load('Simulation/Results/repeated-simulations/KLNoAl.RData')
+  load('output/simulation/KLNoAl.RData')
   i <- 1
   j <- 2
   idx.inf <- (levs*(i-1) + j-1) + 1
@@ -990,7 +989,7 @@ bias2   <- numeric(3*levs)
   mean.diff <- mean0 - beta2
   bias2[idxs] <- inprod(mean.diff, mean.diff, 0, 0, rng=range(t.points))
   
-  load('Simulation/Results/repeated-simulations/KLAl-par10.RData')
+  load('output/simulation/KLAl-par10.RData')
   i <- 1
   j <- 3
   idx.inf <- (levs*(i-1) + j-1) + 1
@@ -1016,7 +1015,7 @@ bias2   <- numeric(3*levs)
   mean.diff <- mean0 - beta2
   bias2[idxs] <- inprod(mean.diff, mean.diff, 0, 0, rng=range(t.points))
   
-  load('Simulation/Results/repeated-simulations/Kraus_nowgts.RData')
+  load('output/simulation/Kraus_nowgts.RData')
   i <- 1
   j <- 4
   idx.inf <- (levs*(i-1) + j-1) + 1
@@ -1042,7 +1041,7 @@ bias2   <- numeric(3*levs)
   mean.diff <- mean0 - beta2
   bias2[idxs] <- inprod(mean.diff, mean.diff, 0, 0, rng=range(t.points))
   
-  load('Simulation/Results/repeated-simulations/KLNoAl_nowgts.RData')
+  load('output/simulation/KLNoAl_nowgts.RData')
   i <- 1
   j <- 5
   idx.inf <- (levs*(i-1) + j-1) + 1
@@ -1068,7 +1067,7 @@ bias2   <- numeric(3*levs)
   mean.diff <- mean0 - beta2
   bias2[idxs] <- inprod(mean.diff, mean.diff, 0, 0, rng=range(t.points))
   
-  load('Simulation/Results/repeated-simulations/KLAl_nowgts.RData')
+  load('output/simulation/KLAl_nowgts.RData')
   i <- 1
   j <- 6
   idx.inf <- (levs*(i-1) + j-1) + 1
