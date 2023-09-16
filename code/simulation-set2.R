@@ -16,14 +16,15 @@ library(ggplot2)
 library(beepr)
 library(matrixcalc)
 library(latex2exp)
+library(ggplotify)
 
 rm(list=ls())
 graphics.off()
 cat("\014")
 
 ## Load Functions
-source('functions/weighted-analysis.R')
-source('functions/generate_data.R')
+source('code/functions/weighted-analysis.R')
+source('code/functions/generate-data.R')
 load('output/simulation/reg_info.RData')
 
 ## Simulation - SET 2  --------------------------------------------------------------
@@ -819,7 +820,7 @@ ggsave(filename = "set2-mse.pdf",
        bg = NULL,)
 
 pg_legend <- cowplot::get_legend(pgplot)
-as_ggplot(pg_legend)
+as.ggplot(pg_legend)
 
 
 ggsave(filename = "set2-legend.pdf",
@@ -1166,28 +1167,8 @@ for(a in 1:length(vec.par)) #a=1
                                                     wgts.recon.flag = FALSE)
     
     MSE_cv[b,a] <- method_evaluation$MSE
-    if(b==1)
-    {
-      beta0.est <- method_evaluation$beta_estimates[[1]]$fd
-      beta1.est <- method_evaluation$beta_estimates[[2]]$fd
-      beta2.est <- method_evaluation$beta_estimates[[3]]$fd
-      
-      beta0.est$coefs <- beta0.est$coefs %*% rep(1,B)
-      beta1.est$coefs <- beta1.est$coefs %*% rep(1,B)
-      beta2.est$coefs <- beta2.est$coefs %*% rep(1,B)
-    } else {
-      beta0.est$coefs[,b] <- as.matrix(method_evaluation$beta_estimates[[1]]$fd$coefs, ncol=1)
-      beta1.est$coefs[,b] <- as.matrix(method_evaluation$beta_estimates[[2]]$fd$coefs, ncol=1)
-      beta2.est$coefs[,b] <- as.matrix(method_evaluation$beta_estimates[[3]]$fd$coefs, ncol=1)
-    }
-    
-    
     pb$tick()
   }
-  
-  beta0.list[[a]] <- beta0.est
-  beta1.list[[a]] <- beta1.est
-  beta2.list[[a]] <- beta2.est
 }
 
 End.Time <- Sys.time()
@@ -1230,28 +1211,8 @@ for(a in 1:length(vec.par)) #a=1
                                                     wgts.recon.flag = FALSE)
     
     MSE_cv[b,a] <- method_evaluation$MSE
-    if(b==1)
-    {
-      beta0.est <- method_evaluation$beta_estimates[[1]]$fd
-      beta1.est <- method_evaluation$beta_estimates[[2]]$fd
-      beta2.est <- method_evaluation$beta_estimates[[3]]$fd
-      
-      beta0.est$coefs <- beta0.est$coefs %*% rep(1,B)
-      beta1.est$coefs <- beta1.est$coefs %*% rep(1,B)
-      beta2.est$coefs <- beta2.est$coefs %*% rep(1,B)
-    } else {
-      beta0.est$coefs[,b] <- as.matrix(method_evaluation$beta_estimates[[1]]$fd$coefs, ncol=1)
-      beta1.est$coefs[,b] <- as.matrix(method_evaluation$beta_estimates[[2]]$fd$coefs, ncol=1)
-      beta2.est$coefs[,b] <- as.matrix(method_evaluation$beta_estimates[[3]]$fd$coefs, ncol=1)
-    }
-    
-    
     pb$tick()
   }
-  
-  beta0.list[[a]] <- beta0.est
-  beta1.list[[a]] <- beta1.est
-  beta2.list[[a]] <- beta2.est
 }
 
 End.Time <- Sys.time()
@@ -1260,7 +1221,7 @@ round(End.Time - Start.Time, 2)
 beep()
 
 name.file <- paste0(box.dir, '/LOO_',method,'_wgts.RData')
-save(vec.par, MSE_cv, beta0.list, beta1.list, beta2.list, file=name.file)
+save(MSE_cv, file=name.file)
 
 #### Reconstruction-driven weights ----------------------------------------------
 vec.par <- c(0)
@@ -1292,28 +1253,8 @@ for(a in 1:length(vec.par)) #a=1
                                                     wgts.recon.flag = TRUE)
     
     MSE_cv[b,a] <- method_evaluation$MSE
-    if(b==1)
-    {
-      beta0.est <- method_evaluation$beta_estimates[[1]]$fd
-      beta1.est <- method_evaluation$beta_estimates[[2]]$fd
-      beta2.est <- method_evaluation$beta_estimates[[3]]$fd
-      
-      beta0.est$coefs <- beta0.est$coefs %*% rep(1,B)
-      beta1.est$coefs <- beta1.est$coefs %*% rep(1,B)
-      beta2.est$coefs <- beta2.est$coefs %*% rep(1,B)
-    } else {
-      beta0.est$coefs[,b] <- as.matrix(method_evaluation$beta_estimates[[1]]$fd$coefs, ncol=1)
-      beta1.est$coefs[,b] <- as.matrix(method_evaluation$beta_estimates[[2]]$fd$coefs, ncol=1)
-      beta2.est$coefs[,b] <- as.matrix(method_evaluation$beta_estimates[[3]]$fd$coefs, ncol=1)
-    }
-    
-    
     pb$tick()
   }
-  
-  beta0.list[[a]] <- beta0.est
-  beta1.list[[a]] <- beta1.est
-  beta2.list[[a]] <- beta2.est
 }
 
 End.Time <- Sys.time()
@@ -1322,7 +1263,7 @@ round(End.Time - Start.Time, 2)
 beep()
 
 name.file <- paste0('Simulation/Results/LOO_',method,'_corwgts.RData')
-save(vec.par, MSE_cv, beta0.list, beta1.list, beta2.list, file=name.file)
+save(MSE_cv, file=name.file)
 
 # Plot results-------------------------------------------------------------
 B <- 100
@@ -1331,13 +1272,13 @@ load('output/simulation/LOO_KLAl_unwgt.RData')
 MSE_cv.mat[,1] <- MSE_cv
 
 load('output/simulation/LOO_KLAl_wgts.RData')
-MSE_cv.mat <- cbind(MSE_cv.mat, MSE_cv[,(1:length(vec.par)-1)])
+MSE_cv.mat <- cbind(MSE_cv.mat, MSE_cv[,1:5])
 
 load('output/simulation/LOO_KLAl_corwgts.RData')
 MSE_cv.mat <- cbind(MSE_cv.mat, MSE_cv[,1])
 
 load('output/simulation/LOO_KLAl_wgts.RData')
-MSE_cv.mat <- cbind(MSE_cv.mat, MSE_cv[,length(vec.par)])
+MSE_cv.mat <- cbind(MSE_cv.mat, MSE_cv[,6])
 
 
 MSE <- vec(MSE_cv.mat)

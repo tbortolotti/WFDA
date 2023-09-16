@@ -15,9 +15,9 @@ workflow_weighted_analysis <- function(b,
 {
   
   #'# Load methods ---------------------------------------
-  source('functions/weighted-smoothing.R')
-  source('functions/weighted-regression.R')
-  source('functions/reconstruction.R')
+  source('code/functions/weighted-smoothing.R')
+  source('code/functions/weighted-regression.R')
+  source('code/functions/reconstruction.R')
   
   ## Utilities for the identification of the b-th batch
   n <- dim(curves)[2]

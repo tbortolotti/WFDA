@@ -16,14 +16,15 @@ library(ggplot2)
 library(beepr)
 library(matrixcalc)
 library(latex2exp)
+library(ggplotify)
 
 rm(list=ls())
 graphics.off()
 cat("\014")
 
 ## Load Functions
-source('functions/weighted-analysis.R')
-source('functions/generate_data.R')
+source('code/functions/weighted-analysis.R')
+source('code/functions/generate-data.R')
 load('output/simulation/reg_info.RData')
 
 ## Simulation - SET 1 --------------------------------------------------------
@@ -53,7 +54,6 @@ for(b in 1:B) # b=1
   ## Simulate data
   seed <- 140996
   simulated_data <- generate_data(seed      = (seed+b),
-                                  case      = "CASE-1",
                                   reg.info  = reg.info,
                                   case.info = case.info)
   
@@ -441,7 +441,6 @@ save(MSE, beta0.est, beta1.est, beta2.est, file=name.file)
 
 
 ## Plot results -------------------------------------------------------
-
 beta0 <- reg.info$beta_estimates[[1]]$fd
 beta0$coefs <- beta0$coefs/3 
 beta1 <- reg.info$beta_estimates[[2]]$fd
@@ -639,8 +638,7 @@ ggsave(filename = "set1-MSE.pdf",
        bg = NULL)
 
 pg_legend <- cowplot::get_legend(pgplot)
-as_ggplot(pg_legend)
-
+as.ggplot(pg_legend)
 
 ggsave(filename = "set1-legend.pdf",
        plot = last_plot(),
@@ -653,6 +651,7 @@ ggsave(filename = "set1-legend.pdf",
        dpi = 300,
        limitsize = TRUE,
        bg = NULL,)
+dev.off()
 
 #### Variance -----------------------
 levs <- 6 #levels of factor method

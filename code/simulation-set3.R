@@ -16,17 +16,18 @@ library(ggplot2)
 library(beepr)
 library(matrixcalc)
 library(latex2exp)
+library(ggplotify)
 
 rm(list=ls())
 graphics.off()
 cat("\014")
 
 ## Load Functions
-source('functions/weighted-analysis.R')
-source('functions/generate_data.R')
+source('code/functions/weighted-analysis.R')
+source('code/functions/generate-data.R')
 load('output/simulation/reg_info.RData')
 
-## Simulation - SET 2  --------------------------------------------------------------
+## Simulation - SET 3  --------------------------------------------------------------
 fix.par <- 10
 
 B <- 100
@@ -822,7 +823,7 @@ ggsave(filename = "PO-percentage.pdf",
        bg = NULL)
 
 pg_legend <- cowplot::get_legend(pgplot)
-as_ggplot(pg_legend)
+as.ggplot(pg_legend)
 
 
 ggsave(filename = "set3-legend.pdf",
