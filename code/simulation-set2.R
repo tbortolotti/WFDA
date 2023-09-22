@@ -29,6 +29,7 @@ load('output/simulation/reg_info.RData')
 
 ## Simulation - SET 2  --------------------------------------------------------------
 perc.po <- 4
+fix.par <- "unwgt"
 
 ## Set the case information
 case.info <- list(n.sim       = 101,
@@ -1114,6 +1115,7 @@ ggsave(filename = "set2-var.pdf",
 
 
 ## LOO CROSS-VALIDATION ---------------------------------------------------------
+box.dir <- 'output/simulation/images'
 
 ## Simulate the data
 # Set the case information
@@ -1139,36 +1141,30 @@ B <- 100
 method <- 'KLAl'
 
 #### Unweighted -------------------------------------------------------------
-MSE_cv <- matrix(data=0, nrow=B, ncol=length(vec.par))
-
-beta0.list <- list()
-beta1.list <- list()
-beta2.list <- list()
+fix.par <- 0
+MSE_cv <- matrix(data=0, nrow=B, ncol=1)
 
 (Start.Time <- Sys.time())
-for(a in 1:length(vec.par)) #a=1
+
+print(paste0('Parameter ', fix.par))
+pb <- progress_bar$new(total=B)
+for(b in 1:B) # b=1
 {
-  fix.par <- vec.par[a]
-  print(paste0('Parameter ', fix.par))
-  pb <- progress_bar$new(total=B)
-  for(b in 1:B) # b=1
-  {
-    method_evaluation <- workflow_weighted_analysis(b               = b,
-                                                    B               = B,
-                                                    t.points        = t.points,
-                                                    breaks          = t.points,
-                                                    T_hp            = T_hp,
-                                                    curves          = curves,
-                                                    curves.true.fd  = curves.true.fd,
-                                                    xlist           = xlist,
-                                                    method          = method,
-                                                    fix.par         = fix.par,
-                                                    wgts.flag       = FALSE,
-                                                    wgts.recon.flag = FALSE)
-    
-    MSE_cv[b,a] <- method_evaluation$MSE
-    pb$tick()
-  }
+  method_evaluation <- workflow_weighted_analysis(b               = b,
+                                                  B               = B,
+                                                  t.points        = t.points,
+                                                  breaks          = t.points,
+                                                  T_hp            = T_hp,
+                                                  curves          = curves,
+                                                  curves.true.fd  = curves.true.fd,
+                                                  xlist           = xlist,
+                                                  method          = method,
+                                                  fix.par         = fix.par,
+                                                  wgts.flag       = FALSE,
+                                                  wgts.recon.flag = FALSE)
+  
+  MSE_cv[b,1] <- method_evaluation$MSE
+  pb$tick()
 }
 
 End.Time <- Sys.time()
@@ -1176,23 +1172,18 @@ round(End.Time - Start.Time, 2)
 
 beep()
 
-name.file <- paste0(box.dir,'/LOO_',method,'_nowgts.RData')
-save(vec.par, MSE_cv, beta0.list, beta1.list, beta2.list, file=name.file)
+name.file <- paste0('output/simulation/LOO_',method,'_nowgts.RData')
+save(MSE_cv, file=name.file)
 
 
 #### Logistic weights ------------------------------------------------------- 
 
-vec.par <- c(5,10,15,20,100,'0-wgts')
+vec.par <- list(5,10,15,20,100,'0-wgts')
 MSE_cv <- matrix(data=0, nrow=B, ncol=length(vec.par))
 
-beta0.list <- list()
-beta1.list <- list()
-beta2.list <- list()
-
 (Start.Time <- Sys.time())
-for(a in 1:length(vec.par)) #a=1
-{
-  fix.par <- vec.par[a]
+for(a in 1:length(vec.par)){
+  fix.par <- vec.par[[a]]
   print(paste0('Parameter ', fix.par))
   pb <- progress_bar$new(total=B)
   for(b in 1:B) # b=1
@@ -1220,41 +1211,33 @@ round(End.Time - Start.Time, 2)
 
 beep()
 
-name.file <- paste0(box.dir, '/LOO_',method,'_wgts.RData')
+name.file <- paste0('output/simulation/LOO_',method,'_wgts.RData')
 save(MSE_cv, file=name.file)
 
 #### Reconstruction-driven weights ----------------------------------------------
-vec.par <- c(0)
-MSE_cv <- matrix(data=0, nrow=B, ncol=length(vec.par))
-
-beta0.list <- list()
-beta1.list <- list()
-beta2.list <- list()
+fix.par <- 0
+MSE_cv <- matrix(data=0, nrow=B, ncol=1)
 
 (Start.Time <- Sys.time())
-for(a in 1:length(vec.par)) #a=1
+
+pb <- progress_bar$new(total=B)
+for(b in 1:B) # b=1
 {
-  fix.par <- vec.par[a]
-  print(paste0('Parameter ', fix.par))
-  pb <- progress_bar$new(total=B)
-  for(b in 1:B) # b=1
-  {
-    method_evaluation <- workflow_weighted_analysis(b               = b,
-                                                    B               = B,
-                                                    t.points        = t.points,
-                                                    breaks          = t.points,
-                                                    T_hp            = T_hp,
-                                                    curves          = curves,
-                                                    curves.true.fd  = curves.true.fd,
-                                                    xlist           = xlist,
-                                                    method          = method,
-                                                    fix.par         = fix.par,
-                                                    wgts.flag       = TRUE,
-                                                    wgts.recon.flag = TRUE)
-    
-    MSE_cv[b,a] <- method_evaluation$MSE
-    pb$tick()
-  }
+  method_evaluation <- workflow_weighted_analysis(b               = b,
+                                                  B               = B,
+                                                  t.points        = t.points,
+                                                  breaks          = t.points,
+                                                  T_hp            = T_hp,
+                                                  curves          = curves,
+                                                  curves.true.fd  = curves.true.fd,
+                                                  xlist           = xlist,
+                                                  method          = method,
+                                                  fix.par         = fix.par,
+                                                  wgts.flag       = TRUE,
+                                                  wgts.recon.flag = TRUE)
+  
+  MSE_cv[b,1] <- method_evaluation$MSE
+  pb$tick()
 }
 
 End.Time <- Sys.time()
@@ -1262,13 +1245,13 @@ round(End.Time - Start.Time, 2)
 
 beep()
 
-name.file <- paste0('Simulation/Results/LOO_',method,'_corwgts.RData')
+name.file <- paste0('output/simulation/LOO_',method,'_corwgts.RData')
 save(MSE_cv, file=name.file)
 
 # Plot results-------------------------------------------------------------
 B <- 100
 MSE_cv.mat <- matrix(data=0, nrow=B, ncol=1)
-load('output/simulation/LOO_KLAl_unwgt.RData')
+load('output/simulation/LOO_KLAl_nowgts.RData')
 MSE_cv.mat[,1] <- MSE_cv
 
 load('output/simulation/LOO_KLAl_wgts.RData')
@@ -1325,4 +1308,4 @@ ggsave(filename = "LOO-MSE-simulation.pdf",
        limitsize = TRUE,
        bg = NULL)
 
-
+dev.off()

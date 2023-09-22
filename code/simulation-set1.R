@@ -119,7 +119,6 @@ for(b in 1:B) # b=1
   ## Simulate data
   seed <- 140996
   simulated_data <- generate_data(seed      = (seed+b),
-                                  case      = "CASE-1",
                                   reg.info  = reg.info,
                                   case.info = case.info)
   
@@ -185,7 +184,6 @@ for(b in 1:B) # b=1
   ## Simulate data
   seed <- 140996
   simulated_data <- generate_data(seed      = (seed+b),
-                                  case      = "CASE-1",
                                   reg.info  = reg.info,
                                   case.info = case.info)
   
@@ -253,7 +251,6 @@ for(b in 1:B) # b=1
   ## Simulate data
   seed <- 140996
   simulated_data <- generate_data(seed      = (seed+b),
-                                  case      = "CASE-1",
                                   reg.info  = reg.info,
                                   case.info = case.info)
   
@@ -319,7 +316,6 @@ for(b in 1:B) # b=1
   ## Simulate data
   seed <- 140996
   simulated_data <- generate_data(seed      = (seed+b),
-                                  case      = "CASE-1",
                                   reg.info  = reg.info,
                                   case.info = case.info)
   
@@ -385,7 +381,6 @@ for(b in 1:B) # b=1
   ## Simulate data
   seed <- 140996
   simulated_data <- generate_data(seed      = (seed+b),
-                                  case      = "CASE-1",
                                   reg.info  = reg.info,
                                   case.info = case.info)
   
