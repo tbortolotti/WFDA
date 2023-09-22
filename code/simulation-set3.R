@@ -810,7 +810,7 @@ pgplot <- ggplot(data.box, aes(x=coefficient, y=beta_mse, fill=method)) +
 
 pgplot + 
   theme(legend.position="none")
-ggsave(filename = "PO-percentage.pdf",
+ggsave(filename = "set3-mse.pdf",
        plot = last_plot(),
        device = NULL,
        path = box.dir,
@@ -1381,7 +1381,7 @@ pgplot <- ggplot(data.box, aes(x=coefficient, y=beta_var, fill=method)) +
 
 pgplot + theme(legend.position="none")
 
-ggsave(filename = "0175.pdf",
+ggsave(filename = "set3-0175.pdf",
        plot = last_plot(),
        device = NULL,
        path = box.dir,
@@ -1658,7 +1658,7 @@ pgplot <- ggplot(data.box, aes(x=coefficient, y=beta_var, fill=method)) +
         legend.text = element_text(size=22))
 pgplot + theme(legend.position="none")
 
-ggsave(filename = "17535.pdf",
+ggsave(filename = "set3-17535.pdf",
        plot = last_plot(),
        device = NULL,
        path = box.dir,
