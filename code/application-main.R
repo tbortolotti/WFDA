@@ -129,11 +129,6 @@ load('output/application/pw_MSE_Sigma.RData')
 
 name_dir     <- paste0("output/images/model-comparison")
 
-plotMSE_pw(MSE.vec   = pw_MSE_Sigma.val$MSE_t,
-           MSE.ita18 = pw_MSE_Sigma.val$MSE_t18,
-           t.points  = t.points,
-           name_dir  = name_dir)
-
 plot_sigma(sigma.t     = pw_MSE_Sigma.val$Sigma_t,
            sigma.ITA18 = pw_MSE_Sigma.val$Sigma_t18,
            t.points    = t.points,
@@ -256,6 +251,7 @@ xtick <- seq(-2,1,by=1)
 
 names.coefs <- c('a','b1','b2','f1','f2','c1','c2','c3','k')
 coefs.names <- c('Intercept', 'B1', 'B2', 'F1', 'F2','C1','C2','C3','K')
+plot.title.letters <- c('(a) ','(a) ','(b) ','(a) ','(b) ','(c) ','(d) ','(e) ','(f) ')
 
 for(j in 1:q) #j=2
 {
@@ -271,7 +267,7 @@ for(j in 1:q) #j=2
     par(mar=c(4.5, 4, 2.5, 1)+.1)
     fda::fbplot(fit=B.list[,j,], x=t.points, method="MBD", color=pal.gb.fade,barcol="grey60", xlab='Period [s]',
                 xlim=range(t.points), ylim=ylim, cex.axis=1.8, cex.lab=1.8, ylab='', xaxt='n')
-    title(main=paste0('(a) ',names.coefs[j]), cex.main=1.8)
+    title(main=paste0(plot.title.letters[j],names.coefs[j]), cex.main=1.8)
     points(t.points, X.ita18[,j], pch=16, col="black")
     grid()
     abline(h=0, col="black", lty=4, lwd=1)

@@ -17,6 +17,7 @@ workflow_weighted_analysis <- function(b,
   #'# Load methods ---------------------------------------
   source('code/functions/weighted-smoothing.R')
   source('code/functions/weighted-regression.R')
+  source('code/functions/unweighted-regression.R')
   source('code/functions/reconstruction.R')
   
   ## Utilities for the identification of the b-th batch
@@ -273,12 +274,12 @@ workflow_weighted_analysis <- function(b,
                              betalist     = blist,
                              wgts         = wgt$wgts.fd)
   } else {
-    mod <- fRegress(y            = curves.fd,
-                    xfdlist      = xlist.train,
-                    betalist     = blist,
-                    returnMatrix = FALSE,
-                    method       = 'fRegress',
-                    sep          = '.')
+    mod <- unwgt_fRegress(y            = curves.fd,
+                          xfdlist      = xlist.train,
+                          betalist     = blist,
+                          returnMatrix = FALSE,
+                          method       = 'fRegress',
+                          sep          = '.')
   }
   
   beta_estimates <- mod$betaestlist
@@ -347,7 +348,8 @@ weighted_analysis_event <- function(b,
                                     seed)
 
 {
-
+  source('code/functions/unweighted-regression.R')
+  source('code/functions/reconstruction.R')
   ## Utilities for the identification of the b-th batch
   n      <- dim(curves)[2]
   p      <- length(xlist)
@@ -499,12 +501,12 @@ weighted_analysis_event <- function(b,
                              betalist     = blist,
                              wgts         = wgt$wgts.fd)
   } else {
-    mod <- fRegress(y            = curves.fd,
-                    xfdlist      = xlist.train,
-                    betalist     = blist,
-                    returnMatrix = FALSE,
-                    method       = 'fRegress',
-                    sep          = '.')
+    mod <- unwgt_fRegress(y            = curves.fd,
+                          xfdlist      = xlist.train,
+                          betalist     = blist,
+                          returnMatrix = FALSE,
+                          method       = 'fRegress',
+                          sep          = '.')
   }
   
   beta_estimates <- mod$betaestlist
@@ -841,8 +843,8 @@ pwMSE <- function(curves, curves.fd, xlist, t.points, events, blist, B,
 {
   #' Methods ------------------------------------------------------------------
   source('code/functions/weighted-regression.R')
-  source('methods/fit_ITA18.R')
-  source('methods/predict_ITA18.R')
+  source('code/functions/unweighted-regression.R')
+  source('code/functions/scalar-analysis.R')
   
   #' Utilities ------------------------------------------------------------------
   n <- dim(curves)[2]
@@ -921,12 +923,12 @@ pwMSE <- function(curves, curves.fd, xlist, t.points, events, blist, B,
                                betalist     = blist,
                                wgts         = wgts.fd.train)
     } else {
-      mod <- fRegress(y            = curves.fd.train,
-                      xfdlist      = xlist.train,
-                      betalist     = blist,
-                      returnMatrix = FALSE,
-                      method       = 'fRegress',
-                      sep          = '.')
+      mod <- unwgt_fRegress(y            = curves.fd.train,
+                            xfdlist      = xlist.train,
+                            betalist     = blist,
+                            returnMatrix = FALSE,
+                            method       = 'fRegress',
+                            sep          = '.')
     }
     
     ## Prepare the list of functional covariates which we use for prediction on

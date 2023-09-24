@@ -26,6 +26,7 @@ load('output/preprocessed-data/data.RData')
 ## Load functions
 source('code/functions/weighted-analysis.R')
 source('code/functions/weighted-regression.R')
+source('code/functions/weighted-smoothing.R')
 source('code/functions/reconstruction.R')
 
 ## Utilities
@@ -76,8 +77,6 @@ curves.fd <- smooth.basis(t.points, curves.full, fPar)$fd
 blist.default <- list(fPar, fPar, fPar, fPar, fPar, fPar, fPar, fPar, fPar)
 
 #### Multistart EAASS algorithm -------------------------------------------
-
-
 calibrate <- FALSE
 
 if(calibrate){
@@ -227,7 +226,8 @@ if(calibrate){
     V.full <- c(V.full, V)
   }
   
-  plot(1:length(V.full), V.full, type='l')
+  #plot(1:length(V.full), V.full, type='l')
+  #dev.off()
   
   best <- which(V.full==min(V.full))
   lambda.opt <- P.full[best,]
@@ -241,14 +241,15 @@ if(calibrate){
   
 }
 
-# Logarithm of the period
+## Selection of the weights ----------------------------------------------------
+#' Via event-wise cross-validation
+#' 
+load('output/calibration/blist_EAASS_multistart.RData')
+
 t.points    <- log10(T.period)
 t.points[1] <- -2.5
 N <- length(t.points)
 log.Thp     <- log10(T_hp)
-
-## Selection of the weights ----------------------------------------------------
-#' Via event-wise cross-validation
 B     <- 10
 method <- 'KLAl'
 
@@ -279,7 +280,7 @@ for(a in 1:A) # a=1
                                                  blist      = blist,
                                                  method     = method,
                                                  fix.par    = fix.par,
-                                                 wgts.flag  = TRUE,
+                                                 wgts.flag  = FALSE,
                                                  seed       = 14996)
     
     MSE_cv[,b,a] <- method_evaluation$MSE_pw
@@ -360,9 +361,15 @@ print(paste0("0-weights", " MSE = ", m_0, " sd = ", s_0))
 
 ## Selection of the reconstruction method --------------------------------------
 #' Via event-wise cross-validation
+load('output/calibration/blist_EAASS_multistart.RData')
+
+t.points    <- log10(T.period)
+t.points[1] <- -2.5
+N <- length(t.points)
+log.Thp     <- log10(T_hp)
+
 B       <- 10
 fix.par <- 100
-
 method <- 'extrapolation'
 
 MSE_cv <- array(data=0, dim=c(N, B, 1))
