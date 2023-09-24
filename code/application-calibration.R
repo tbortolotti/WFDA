@@ -73,6 +73,7 @@ for(j in 1:length(lambda.vec))
 lambda.opt <- lambda.vec[which(gcv.vec == min(gcv.vec))]
 fPar  <- fdPar(fdobj=basis, Lfdobj=2, lambda=lambda.opt)
 curves.fd <- smooth.basis(t.points, curves.full, fPar)$fd
+blist.default <- list(fPar, fPar, fPar, fPar, fPar, fPar, fPar, fPar, fPar)
 
 #### Multistart EAASS algorithm -------------------------------------------
 
@@ -86,7 +87,6 @@ if(calibrate){
   P.size <- 20
   n.par <- length(xlist.full)
   r=0.5
-  blist.default <- list(fPar, fPar, fPar, fPar, fPar, fPar, fPar, fPar, fPar)
   perturbation.vec <- c(0.5,2)
   
   n.multistart <- 5
@@ -237,13 +237,9 @@ if(calibrate){
     blist[[reg]]$lambda <- lambda.opt[reg]
   }
   
-  save(blist, file=paste0('output/calibration/blist_EAASS_multistart.RData'))
+  save(blist, file='output/calibration/blist_EAASS_multistart.RData')
   
 }
-
-
-## Function for the evaluation of the MSE for each proposed method
-source('methods/Reconstruction/methods_workflow.R')
 
 # Logarithm of the period
 t.points    <- log10(T.period)
@@ -298,8 +294,7 @@ round(End.Time - Start.Time, 2)
 
 beep()
 
-name.file <- paste0('output/calibration/MSE_nowgts.RData')
-save(vec.par, MSE_cv, MSE_glob.list, file=name.file)
+save(vec.par, MSE_cv, MSE_glob.list, file='output/calibration/MSE_nowgts.RData')
 
 #### Logistic weights ----------------------------------------------------------
 vec.par <- list(5,10,15,20,100,"0-weights")
@@ -343,8 +338,7 @@ round(End.Time - Start.Time, 2)
 
 beep()
 
-name.file <- paste0('output/calibration/MSE_wgts.RData')
-save(vec.par, MSE_cv, MSE_glob.list, file=name.file)
+save(vec.par, MSE_cv, MSE_glob.list, file='output/calibration/MSE_wgts.RData')
 
 #### Show results --------------------------------------------------------------
 load('output/calibration/MSE_nowgts.RData')
@@ -404,9 +398,7 @@ round(End.Time - Start.Time, 2)
 
 beep()
 
-name.file <- paste0('output/calibration/MSE_extrap.RData')
-
-save(MSE_cv, MSE_glob.list, file=name.file)
+save(MSE_cv, MSE_glob.list, file='output/calibration/MSE_extrap.RData')
 
 #### Show results --------------------------------------------------------------
 # Extrapolation

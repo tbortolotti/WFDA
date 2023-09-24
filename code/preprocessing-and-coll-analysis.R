@@ -566,7 +566,7 @@ ext.ticks <- c(-2.5,xticks)
 
 levs <- 5
 
-pdf(file = "output/supplementary/geom-and-anel.pdf", width = 4, height = 4)
+pdf(file = "output/images/supplementary/geom-and-anel.pdf", width = 4, height = 4)
 contour(t.points, t.points, cor.mat.78,
         xlab="Geometric Attenuation",
         ylab="Anelastic Attenuation",
@@ -583,7 +583,7 @@ axisIntervals(2, atTick1=ext.ticks, atTick2=NA,
               labels=10^xticks )
 dev.off()
 
-pdf(file = "output/supplementary/highmag-and-geom.pdf", width = 4, height = 4)
+pdf(file = "output/images/supplementary/highmag-and-geom.pdf", width = 4, height = 4)
 contour(t.points, t.points, cor.mat.36,
         xlab="High Magnitudes",
         ylab="Geometric Attenuation",
@@ -599,7 +599,7 @@ axisIntervals(2, atTick1=ext.ticks, atTick2=NA,
               labels=10^xticks)
 dev.off()
 
-pdf(file = "output/supplementary/lowmag-and-geom.pdf", width = 4, height = 4)
+pdf(file = "output/images/supplementary/lowmag-and-geom.pdf", width = 4, height = 4)
 contour(t.points, t.points, cor.mat.26,
         xlab="Low Magnitudes",
         ylab="Geometric Attenuation",
@@ -615,7 +615,7 @@ axisIntervals(2, atTick1=ext.ticks, atTick2=NA,
               labels=10^xticks)
 dev.off()
 
-pdf(file = "output/supplementary/lowmag-and-highmag.pdf", width = 4, height = 4)
+pdf(file = "output/images/supplementary/lowmag-and-highmag.pdf", width = 4, height = 4)
 contour(t.points, t.points, cor.mat.23,
         xlab="Low Magnitudes",
         ylab="High Magnitudes",

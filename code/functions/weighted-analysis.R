@@ -347,10 +347,7 @@ weighted_analysis_event <- function(b,
                                     seed)
 
 {
-  
-  ## Methods
-  source('methods/Regression/unwgt_fRegress.R')
-  
+
   ## Utilities for the identification of the b-th batch
   n      <- dim(curves)[2]
   p      <- length(xlist)
@@ -422,7 +419,7 @@ weighted_analysis_event <- function(b,
   
   if(any(method == 'KLAl'))
   {
-    load('Results/rec-method-comparison/K_Al.RData')
+    load('output/calibration/K_Al.RData')
     K.train <- K_Al[train]
     
     Y_list <- lapply(seq_len(ncol(curves.train)), function(i) curves.train[!is.na(curves.train[,i]),i])
@@ -502,12 +499,12 @@ weighted_analysis_event <- function(b,
                              betalist     = blist,
                              wgts         = wgt$wgts.fd)
   } else {
-    mod <- unwgt_fRegress(y            = curves.fd,
-                          xfdlist      = xlist.train,
-                          betalist     = blist,
-                          returnMatrix = FALSE,
-                          method       = 'fRegress',
-                          sep          = '.')
+    mod <- fRegress(y            = curves.fd,
+                    xfdlist      = xlist.train,
+                    betalist     = blist,
+                    returnMatrix = FALSE,
+                    method       = 'fRegress',
+                    sep          = '.')
   }
   
   beta_estimates <- mod$betaestlist
@@ -843,7 +840,7 @@ pwMSE <- function(curves, curves.fd, xlist, t.points, events, blist, B,
                   verbose=TRUE)
 {
   #' Methods ------------------------------------------------------------------
-  source('code/functions/weighted-regression.R/Regression/unwgt_fRegress.R')
+  source('code/functions/weighted-regression.R')
   source('methods/fit_ITA18.R')
   source('methods/predict_ITA18.R')
   
@@ -924,12 +921,12 @@ pwMSE <- function(curves, curves.fd, xlist, t.points, events, blist, B,
                                betalist     = blist,
                                wgts         = wgts.fd.train)
     } else {
-      mod <- unwgt_fRegress(y            = curves.fd.train,
-                            xfdlist      = xlist.train,
-                            betalist     = blist,
-                            returnMatrix = FALSE,
-                            method       = 'fRegress',
-                            sep          = '.')
+      mod <- fRegress(y            = curves.fd.train,
+                      xfdlist      = xlist.train,
+                      betalist     = blist,
+                      returnMatrix = FALSE,
+                      method       = 'fRegress',
+                      sep          = '.')
     }
     
     ## Prepare the list of functional covariates which we use for prediction on

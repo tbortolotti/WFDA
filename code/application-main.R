@@ -111,27 +111,23 @@ End.Time <- Sys.time()
 round(End.Time - Start.Time, 2)
 beep()
 
-## PLOTS -----------------------------------------------------------------------
-name_dir     <- paste0("output/images")
-input        <- list(xlist    = mod$xfdlist,
-                     t.points = t.points,
-                     blist    = blist)
-
 ## Model comparison ------------------------------------------------------------
 
+source('code/functions/application-plots.R')
+source('code/functions/scalar-analysis.R')
+
 ## Fit scalar ITA18
-source('methods/fit_ITA18.R')
 scalar.ITA18 <- fit_ITA18(data.f, curves)
 
 coefs.ITA18 <- scalar.ITA18$coefs.ITA18
 y.hat.ITA18 <- scalar.ITA18$y.hat.ITA18
 
-save(coefs.ITA18, file="DATA-rev/coefs_ITA18.RData")
+save(coefs.ITA18, file="output/application/coefs_ITA18.RData")
 
 ## Plot MSE and sigma comparison
-source('methods/plots/plotMSE_pw.R')
-source('methods/plots/plot_sigma.R')
-load('Results/results/pw_MSE_Sigma.RData')
+load('output/application/pw_MSE_Sigma.RData')
+
+name_dir     <- paste0("output/images/model-comparison")
 
 plotMSE_pw(MSE.vec   = pw_MSE_Sigma.val$MSE_t,
            MSE.ita18 = pw_MSE_Sigma.val$MSE_t18,
@@ -143,21 +139,9 @@ plot_sigma(sigma.t     = pw_MSE_Sigma.val$Sigma_t,
            t.points    = t.points,
            name_dir    = name_dir)
 
-## Prediction comparison
-source("methods/plots/model_comparison.R")
-t.idxs <- c(2,7,21)
-model_comparison(mod.fit    = mod,
-                 t.points   = t.points,
-                 name_dir   = name_dir,
-                 t.idxs     = t.idxs,
-                 data       = data.f,
-                 curves     = curves.extrap,
-                 corrective = FALSE,
-                 set.log    = TRUE)
-
 
 ## Bootstrap sample of the functional coefficients -----------------------------
-## Preprocessing ---------------------------------------------------------------
+## Preprocessing
 extrapolate   <- extrapolation(curves       = curves,
                                t.points     = T.period,
                                T_hp         = T_hp,
@@ -191,9 +175,9 @@ mod <- weighted_fRegress(y            = curves.extrap.fd,
                          wgts         = wgt$wgts.fd)
 
 # 2. evaluate the residuals
-curves.extrap.hat <- my_predict_fRegress(mod          = mod,
-                                         xlist        = mod$xfdlist,
-                                         t.points     = t.points)
+curves.extrap.hat <- predict_fRegress(mod          = mod,
+                                      xlist        = mod$xfdlist,
+                                      t.points     = t.points)
 res <- curves.extrap.hat - curves.extrap.fd
 wgts.fd <- wgt$wgts.fd
 
@@ -231,23 +215,23 @@ for(b in 1:B)
 
 beep()
 
-save(B.list, mod, n, q, L, N, T.period, file='output/bootstrap_result_B1000.RData')
+save(B.list, mod, n, q, L, N, T.period, file='output/application/bootstrap_result_B1000.RData')
 
 
 ## PLOTS ------------------------------------------------------------------------------
-load('Results/results/ITA18_bootstrap_result_B300.RData')
-a0 <- mod$coefs.ITA18[,1]
-b1 <- mod$coefs.ITA18[,2]
-b2 <- mod$coefs.ITA18[,3]
-f1 <- mod$coefs.ITA18[,4]
-f2 <- mod$coefs.ITA18[,5]
-c1 <- mod$coefs.ITA18[,6]
-c2 <- mod$coefs.ITA18[,7]
-c3 <- mod$coefs.ITA18[,8]
-k0 <- mod$coefs.ITA18[,9]
+load("output/application/coefs_ITA18.RData")
+a0      <- coefs.ITA18$a0
+b1      <- coefs.ITA18$b1
+b2      <- coefs.ITA18$b2
+c1      <- coefs.ITA18$c1
+c2      <- coefs.ITA18$c2
+c3      <- coefs.ITA18$c3
+k0      <- coefs.ITA18$k0
+f1      <- coefs.ITA18$f1
+f2      <- coefs.ITA18$f2
 X.ita18 <- cbind(a0,b1,b2,f1,f2,c1,c2,c3,k0)
 
-load('output/bootstrap_result_B1000.RData')
+load('output/application/bootstrap_result_B1000.RData')
 library(boot)
 
 overall.conf <- list()
@@ -283,7 +267,7 @@ for(j in 1:q) #j=2
     y.max <- max(c(overall.conf[[j]][1,], X.ita18[,j]))
     ylim <- c(y.min, y.max)
     
-    pdf(file = paste0("output/images/reg_",coefs.names[j],".pdf"), width = 8, height = 5)
+    pdf(file = paste0("output/images/model-comparison/reg_",coefs.names[j],".pdf"), width = 8, height = 5)
     par(mar=c(4.5, 4, 2.5, 1)+.1)
     fda::fbplot(fit=B.list[,j,], x=t.points, method="MBD", color=pal.gb.fade,barcol="grey60", xlab='Period [s]',
                 xlim=range(t.points), ylim=ylim, cex.axis=1.8, cex.lab=1.8, ylab='', xaxt='n')

@@ -444,7 +444,7 @@ beta2 <- reg.info$beta_estimates[[3]]$fd
 grid0    <- reg.info$t.points
 t.points <- seq(range(grid0)[1], range(grid0)[2], 0.25)
 
-box.dir <- 'output/simulation/images'
+box.dir <- 'output/images/simulation'
 
 
 #### MSE ---------------------------------

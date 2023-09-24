@@ -585,7 +585,7 @@ beta2 <- reg.info$beta_estimates[[3]]$fd
 grid0    <- reg.info$t.points
 t.points <- seq(range(grid0)[1], range(grid0)[2], 0.25)
 
-box.dir <- 'output/simulation/images'
+box.dir <- 'output/images/simulation'
 
 
 #### SET 2 - MSE ----------------------------------------------------
@@ -1280,7 +1280,7 @@ names(data.box) <- c('MSE', 'class')
 class_order<- c("unwgt", "a=5","a=10", "a=15", "a=20", "a=inf", "rec-wgts", "0-wgts")
 data.box <- data.box %>% mutate(class = factor(x = class, levels = class_order))
 
-box.dir <- 'output/simulation/images'
+box.dir <- 'output/images/simulation'
 
 pg_plot <- ggplot(data.box, aes(x = class, y = MSE, fill=class))+
   geom_boxplot() + scale_fill_grey()
