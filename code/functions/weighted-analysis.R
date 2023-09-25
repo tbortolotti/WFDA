@@ -693,7 +693,6 @@ create_zero_weights <- function(curves.rec, t.points, breaks, reconst_fcts, Thp,
     tt <- seq(range(t.points)[1], range(t.points)[2], by=step)
   }
   
-  
   wgts.obs <- matrix(data=1, nrow=length(tt), ncol=n)
   
   for(i in 1:length(reconst_fcts))
@@ -704,7 +703,8 @@ create_zero_weights <- function(curves.rec, t.points, breaks, reconst_fcts, Thp,
     
     x        <- tt[(imax.new+1):length(tt)]
     
-    y.x      <- rep(1e-6, length(x))
+    valy     <- ifelse(log.flag, 1e-6, 1e-7)
+    y.x      <- rep(valy, length(x))
     y        <- rep(1,imax.new)
     y        <- c(y,y.x)
     
@@ -773,7 +773,7 @@ eval_MSE_functional <- function(curves, curves.hat, t.points)
     MSE.vec[i] <- diag(inprod(err.i, err.i, 0, 0, rng=range(t.points)))
   }
   
-  MSE     <- sum(MSE.vec)/n
+  MSE <- sum(MSE.vec)/n
   
   return(MSE)
 }

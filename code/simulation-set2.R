@@ -1115,9 +1115,7 @@ ggsave(filename = "set2-var.pdf",
 
 
 ## LOO CROSS-VALIDATION ---------------------------------------------------------
-box.dir <- 'output/simulation/images'
-
-## Simulate the data
+# Simulate the data
 # Set the case information
 case.info <- list(n.sim       = 100,
                   ext.noise   = 0.5,
@@ -1182,7 +1180,7 @@ vec.par <- list(5,10,15,20,100,'0-wgts')
 MSE_cv <- matrix(data=0, nrow=B, ncol=length(vec.par))
 
 (Start.Time <- Sys.time())
-for(a in 1:length(vec.par)){
+for(a in 1:length(vec.par)){ # a <- 6
   fix.par <- vec.par[[a]]
   print(paste0('Parameter ', fix.par))
   pb <- progress_bar$new(total=B)
@@ -1249,7 +1247,8 @@ name.file <- paste0('output/simulation/LOO_',method,'_corwgts.RData')
 save(MSE_cv, file=name.file)
 
 # Plot results-------------------------------------------------------------
-B <- 100
+box.dir <- 'output/simulation/images'
+
 MSE_cv.mat <- matrix(data=0, nrow=B, ncol=1)
 load('output/simulation/LOO_KLAl_nowgts.RData')
 MSE_cv.mat[,1] <- MSE_cv
@@ -1262,7 +1261,6 @@ MSE_cv.mat <- cbind(MSE_cv.mat, MSE_cv[,1])
 
 load('output/simulation/LOO_KLAl_wgts.RData')
 MSE_cv.mat <- cbind(MSE_cv.mat, MSE_cv[,6])
-
 
 MSE <- vec(MSE_cv.mat)
 
@@ -1296,7 +1294,7 @@ pg_plot +
         axis.title.x = element_text(size = 22),
         axis.title.y = element_text(size = 22))
 
-ggsave(filename = "LOO-MSE-simulation.pdf",
+ggsave(filename = "set2-LOOmse.pdf",
        plot = last_plot(),
        device = NULL,
        path = box.dir,
