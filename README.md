@@ -8,16 +8,22 @@ This repository contains the implementations of the methodologies of Weighted Fu
 Weighted Functional Data Analysis adapts the classical techniques of smoothing and function-on-function linear regression for the analysis of reconstructed partially observed functional data.
 
 ## Structure of the repository
-The repository is composed of:
-* `preprocessing.R`: R script that operates the preprocessing of data loaded from scratch, namely from the files in .mat extension. The code loads data in the .mat files, extract the useful information and creates and saves in directiory `DATA` all .RData files that are going to be directly loaded in the analysis. In particular, the function covariates are generated from the original seismic parameters via a smoothing technique.
-* `main.R`: R script that performs the WFDA analysis, from curves reconstruction via linear extrapolation to the weighted function-on-function regression and diagnostic.
-* `main-unwgt.R`: R script that performs the unweighted FDA analysis, from curves reconstruction via linear extrapolation to the function-on-function regression and diagnostic.
-* `main-bootstrap.R`: R script that performs bootstrap sampling from the distribution of the regression functional coefficients.
-* `blist-selection.R`: R script that performs a preliminary analysis on the most appropriate choice the q penalization parameters introduced in the objective function of the penalized weighted least squares criterion for regression. The analysis consists in a 5-fold cross-validation that identifies the optimal parameters as those minimizing the Mean Squared Error.
-* `reconstruction-methods-comparison.R`: R script that performs a cross-validation analysis between some reconstruction methods present in the literature and the extrapolation method associated to the weighted analysis. The methods are compared by means of the Mean Squared Error.
-* `DATA`: Folder containing the data of the case study. In particular, `curves.RData` is the file containing the values of the registered curves at the sampling instants. It is a matrix of dimension N x n, where N is the number of sampling instant and n is the numerosity of the curves. `data.RData` contains the values of the original seismic parameters, i.e. Joyner-Boore distance (dJB), magnitude (MAG), style-of-faulting (SoF), shear-wave velocity (VS30) and frequencies of registration U_hp and V_hp. `xlist.RData` contains a 9-element list of the functional covariates, after a smoothing procedure was performed in a preprocessing step. `events.RData` contains information about the event associated to each curve, namely the event identification number (event.id), the longitude and latitude (event.long, event.lat).
-* `methods`: Folder containing all functions used in the analysis. Each function in the folder contains a brief description of its usage and of its input and return parameters.  `methods/plots` contains the functions used to create the plots and to do diagnostic on the results of the analysis. `methods/Regression` contains the functions used to perform the function-on-function linear regression.
-* `Simulation`: Folder containing all codes and results related to the simulation study discussed in the paper.
+The repository is composed of three folders:
+* `code`: All scripts for replicating the analyses from the simulation study and the case study are reported here.
+* `data`: The folder contains the flat file ITA18_SA_flatfile.csv, containing peak, duration and energy parameters, as well as the spectral acceleration
+ordinates SA calculated assuming 5% damping in the range 0.01-10s and associated metadata of ITA18 dataset. 
+* `output`: The folder contains all results and figures which can be replicated with the scripts in the `code` folder. The scripts automatically save in this folder the intermediate and final results and all figures.
+
+### Code
+* `simulation-set1.R`: The first simulation set discussed in Section 4.2 of the paper. The estimates from the weighted and the unweighted methodology are compared over different reconstruction methods.
+* `simulation-set2.R`: The second simulation set discussed in Section 4.2 of the paper. The estimates from the weighted methodology are compared over multiple alternative definitions of the functional weights.
+* `simulation-set3.R`: The second simulation set discussed in Section 2.3 of the supplementary material. The performance of the weighted methodology is assessed in scenarios with a varying fraction of partially observed data.
+* `preprocessing-and-coll-analysis.R`: The code reproduces the preprocessing of the seismological data (loaded from the flat file in saved in the data folder), defines and saves the functional covariates as discussed in Section 2 of the manuscript, and performs the collinearity analysis presented in Section 3.1 of Supplement A.
+* `application-calibration.R`: Calibration of the methodology for the case study, as described in Section 5.1 of the Manuscript. Specifically, the script allows to identify the best penalization parameters for the functional regression coefficients, and to select the optimal reconstruction strategy and functional weights for the seismic data.
+* `application-main.R`: The script fits the final ground motion model, evaluates a bootstrap sample of the functional regression coefficients and performs a comparison with the scalar benchmark, producing the results presented in Section 5.2 of the Manuscript.
+* `functions`: Folder containing all functions which have been implemented and are used to simulate partially observed functional data, perform the weighted analysis, estimate prediction errors via cross-validation, and plot results.
+
+All analytical results and images are automatically saved in the output folder.
 
 ## Installation
 
