@@ -1,5 +1,3 @@
-setwd('~/Documents/R/WFDA')
-
 library(fda)
 library(fdakma)
 library(roahd)
@@ -576,6 +574,9 @@ name.file <- paste0('output/simulation/',method,'-0wgts.RData')
 save(MSE, beta0.est, beta1.est, beta2.est, file=name.file)
 
 ## Plot results -------------------------------------------------------
+#' With the following chunks of code, we are replicating Figure 5 of the
+#' manuscript (a and b). Specifically, Subsection MSE of this script reproduces
+#' Figure 5a, while Subsection Variance reproduces Figure 5b
 
 beta0 <- reg.info$beta_estimates[[1]]$fd
 beta0$coefs <- beta0$coefs/3 
@@ -1247,6 +1248,9 @@ name.file <- paste0('output/simulation/LOO_',method,'_corwgts.RData')
 save(MSE_cv, file=name.file)
 
 # Plot results-------------------------------------------------------------
+#' With the following chunks of code, we are replicating Figure 6 of the
+#' manuscript.
+
 box.dir <- 'output/simulation/images'
 
 MSE_cv.mat <- matrix(data=0, nrow=B, ncol=1)

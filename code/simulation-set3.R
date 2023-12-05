@@ -1,5 +1,3 @@
-setwd('~/Documents/R/WFDA')
-
 library(fda)
 library(fdakma)
 library(roahd)
@@ -579,6 +577,10 @@ save(MSE, beta0.est, beta1.est, beta2.est, file=name.file)
 
 
 ## Plot results -------------------------------------------------------
+#' With the followig chunks of code, we are replicating Figure 2 (a and b) and
+#' Figure 3 (a and b) of the Supplementary Material. Specifically, Subsection MSE
+#' of this script reproduces Figure 2a, Subsection Variance reproduces Figure 2b,
+#' Subsection [0,1.75] reproduces 3a, and Subsection [1.75,3] reproduces 3b.
 
 beta0 <- reg.info$beta_estimates[[1]]$fd
 beta0$coefs <- beta0$coefs/3 

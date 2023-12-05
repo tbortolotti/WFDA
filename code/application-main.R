@@ -1,5 +1,3 @@
-setwd('~/Documents/R/WFDA')
-
 library(fda)
 library(fdakma)
 library(roahd)

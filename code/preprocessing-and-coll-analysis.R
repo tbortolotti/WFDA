@@ -1,5 +1,3 @@
-setwd('~/Documents/R/WFDA')
-
 rm(list=ls())
 graphics.off()
 cat("\014")
@@ -204,21 +202,24 @@ auxi <- dJB
 idxs <- which(dJB<0.1)
 auxi[idxs] <- 0.1
 
-## Plot of magnitude versus distance -- black and white
-cols <- rep(pal[1], length(dJB))
-cols[which(SoF=="NF")] <- "gray80"
-cols[which(SoF=="SS")] <- "gray60"
-cols[which(SoF=="TF")] <- "gray40"
-
-pdf(file = paste0("output/images/MAGvsDIST.pdf"), width = 5, height = 5)
-par(mar=c(4.5,4.5,2.5,1)+.1)
-plot(log10(auxi), MAG, col=cols, xaxt="n", xlab=TeX("$log_{10} (d_{JB})$"), ylab=TeX("$M_w$"),
-     main="(b) Magnitude vs JB distance", cex.lab=1.65, cex.axis=1.65, cex.main=1.65, pch=16)
-axis(side=1, at=dticks, labels=10^dticks, cex.axis=1.65)
-grid()
-legend(-1, 5, legend=c("NF", "SS", "TF"), col=c("gray80", "gray60","gray40"),
-       pch=16, cex=1.2)
-dev.off()
+#' The following chunk of code is to reproduce Figure 1b of the manuscript
+{
+  ## Plot of magnitude versus distance -- black and white
+  cols <- rep(pal[1], length(dJB))
+  cols[which(SoF=="NF")] <- "gray80"
+  cols[which(SoF=="SS")] <- "gray60"
+  cols[which(SoF=="TF")] <- "gray40"
+  
+  pdf(file = paste0("output/images/MAGvsDIST.pdf"), width = 5, height = 5)
+  par(mar=c(4.5,4.5,2.5,1)+.1)
+  plot(log10(auxi), MAG, col=cols, xaxt="n", xlab=TeX("$log_{10} (d_{JB})$"), ylab=TeX("$M_w$"),
+       main="(b) Magnitude vs JB distance", cex.lab=1.65, cex.axis=1.65, cex.main=1.65, pch=16)
+  axis(side=1, at=dticks, labels=10^dticks, cex.axis=1.65)
+  grid()
+  legend(-1, 5, legend=c("NF", "SS", "TF"), col=c("gray80", "gray60","gray40"),
+         pch=16, cex=1.2)
+  dev.off()
+}
 
 ## 1. Build Mh, Mref and h functional objects
 names(ITA18.parameters)
@@ -246,32 +247,39 @@ for(t in 1:length(T.period))
 
 vert.idxs <- c(21, 33)
 
-pdf(file = paste0("output/images/perc-log-period.pdf"), width = 8, height = 5)
-par(mar=c(4.5, 4.5, 2.5, 1)+.1)
-plot(t.points, prop, ylim=c(0,1), xlab="Period [s]", ylab="Fraction", type='l', lwd=3,
-     col='black', xaxt='n', cex.lab=1.8, cex.main=1.8, cex.axis=1.8,
-     main = "(b) Period-wise fraction of observed data")
-axis(side=1, at=xticks, labels = 10^xticks, cex.axis=1.8)
-points(t.points, prop, pch=16, col='black')
-grid()
-abline(h=0.75, col='black', lty=5, lwd=1)
-abline(v=t.points[21], col='black', lty=4, lwd=1)
-abline(v=t.points[32], col='black', lty=4, lwd=1)
-dev.off()
+#' This chunk of code reproduces Figure 2b of the manuscript
+{
+  pdf(file = paste0("output/images/perc-log-period.pdf"), width = 8, height = 5)
+  par(mar=c(4.5, 4.5, 2.5, 1)+.1)
+  plot(t.points, prop, ylim=c(0,1), xlab="Period [s]", ylab="Fraction", type='l', lwd=3,
+       col='black', xaxt='n', cex.lab=1.8, cex.main=1.8, cex.axis=1.8,
+       main = "(b) Period-wise fraction of observed data")
+  axis(side=1, at=xticks, labels = 10^xticks, cex.axis=1.8)
+  points(t.points, prop, pch=16, col='black')
+  grid()
+  abline(h=0.75, col='black', lty=5, lwd=1)
+  abline(v=t.points[21], col='black', lty=4, lwd=1)
+  abline(v=t.points[32], col='black', lty=4, lwd=1)
+  dev.off()
+}
 
-yticks <- c(-2,0,2)
-pdf(file = paste0("output/images/curves.pdf"), width = 8, height = 5)
-par(mar=c(4.5, 4.5, 2.5, 1)+.1)
-matplot(t.points, curves, type='l', col='grey80', ylab="IM",
-        xlab="Period [s]", xaxt='n', yaxt='n',
-        cex.lab=1.8, cex.main=1.8, cex.axis=1.8,
-        main = "(a) Curves of IM")
-axis(side=1, at=xticks, labels = 10^xticks, cex.axis=1.8)
-axis(side=2, at=yticks, labels=10^yticks, cex.axis=1.8)
-lines(t.points, curves[,194], type='l', lwd=3, col='black')
-points(t.points, curves[,194], pch=16, col='black')
-grid()
-dev.off()
+#' Chunck reproducing Figure 2a of the manuscript
+{
+  yticks <- c(-2,0,2)
+  pdf(file = paste0("output/images/curves.pdf"), width = 8, height = 5)
+  par(mar=c(4.5, 4.5, 2.5, 1)+.1)
+  matplot(t.points, curves, type='l', col='grey80', ylab="IM",
+          xlab="Period [s]", xaxt='n', yaxt='n',
+          cex.lab=1.8, cex.main=1.8, cex.axis=1.8,
+          main = "(a) Curves of IM")
+  axis(side=1, at=xticks, labels = 10^xticks, cex.axis=1.8)
+  axis(side=2, at=yticks, labels=10^yticks, cex.axis=1.8)
+  lines(t.points, curves[,194], type='l', lwd=3, col='black')
+  points(t.points, curves[,194], pch=16, col='black')
+  grid()
+  dev.off()
+}
+
 
 #### Functional covariates on log(T) -------------------------------------------
 t.points <- log10(T.period)
@@ -287,25 +295,27 @@ basis <- create.bspline.basis(rangeval=range(t.points), breaks=breaks, norder=3)
 fPar <- fdPar(fdobj=basis, Lfdobj=1, lambda=0.1)
 Mh.fd <- smooth.basis(t.points, ITA18.parameters$Mh.vec, fPar)$fd
 
-
-xticks <- c(-2,-1,0,1)
-xx <- seq(-2.5, 1, length.out=1000)
-Mh.fd.vals <- eval.fd(xx, Mh.fd)
-pdf(file = paste0("output/images/Mh.pdf"), width = 8, height = 5)
-par(mar=c(4.5, 4.5, 2.5, 1)+.1)
-plot(xx, Mh.fd.vals, type='l', xlab="Period [s]", ylab=TeX(r'($M_h$)'),
-     lwd=3, col='black', xaxt='n', main='(a) Smoothing of the hinge magnitude',
-     cex.main=1.8, cex.axis=1.8, cex.lab=1.8)
-axis(side=1, at=xticks, labels = 10^xticks, cex.axis=1.8)
-lines(t.points, ITA18.parameters$Mh.vec, type='l', col='grey40', lwd=2, lty=5)
-legend(x = -2.5, y=6.2,   # Coordinates (x also accepts keywords)
-       legend = c('Lanzano et al., 2019','Quadratic function'),
-       col = c("grey40", "black"),
-       lwd = 2,
-       lty = c(5,1),
-       cex = 1.8)
-grid()
-dev.off()
+#' Chunk reproducing Figure 1a of the manuscript
+{
+  xticks <- c(-2,-1,0,1)
+  xx <- seq(-2.5, 1, length.out=1000)
+  Mh.fd.vals <- eval.fd(xx, Mh.fd)
+  pdf(file = paste0("output/images/Mh.pdf"), width = 8, height = 5)
+  par(mar=c(4.5, 4.5, 2.5, 1)+.1)
+  plot(xx, Mh.fd.vals, type='l', xlab="Period [s]", ylab=TeX(r'($M_h$)'),
+       lwd=3, col='black', xaxt='n', main='(a) Smoothing of the hinge magnitude',
+       cex.main=1.8, cex.axis=1.8, cex.lab=1.8)
+  axis(side=1, at=xticks, labels = 10^xticks, cex.axis=1.8)
+  lines(t.points, ITA18.parameters$Mh.vec, type='l', col='grey40', lwd=2, lty=5)
+  legend(x = -2.5, y=6.2,   # Coordinates (x also accepts keywords)
+         legend = c('Lanzano et al., 2019','Quadratic function'),
+         col = c("grey40", "black"),
+         lwd = 2,
+         lty = c(5,1),
+         cex = 1.8)
+  grid()
+  dev.off()
+}
 
 # Mref
 basis <- create.bspline.basis(rangeval=range(t.points), breaks=breaks, norder=4)
@@ -566,69 +576,72 @@ ext.ticks <- c(-2.5,xticks)
 
 levs <- 5
 
-pdf(file = "output/images/supplementary/geom-and-anel.pdf", width = 4, height = 4)
-contour(t.points, t.points, cor.mat.78,
-        xlab="Geometric Attenuation",
-        ylab="Anelastic Attenuation",
-        #color.palette = function(n) hcl.colors(n, "RdYlBu", rev = TRUE),
-        main=paste("(a) Correlation across periods for\n",
-                   "Geometric and Anelastic Attenuation"),
-        cex.main=0.8, axes=FALSE, nlevels = levs,
-        lwd=2, labcex=0.8, vfont=c("sans serif", "bold italic"))
-axisIntervals(1, atTick1=ext.ticks, atTick2=NA,
-              atLabels=xticks,
-              labels=10^xticks )
-axisIntervals(2, atTick1=ext.ticks, atTick2=NA,
-              atLabels=xticks,
-              labels=10^xticks )
-dev.off()
+#' The following chunck reproduces Figure 4 of the Supplementary Material
 
-pdf(file = "output/images/supplementary/highmag-and-geom.pdf", width = 4, height = 4)
-contour(t.points, t.points, cor.mat.36,
-        xlab="High Magnitudes",
-        ylab="Geometric Attenuation",
-        main=paste("(d) Correlation across periods for\n",
-                   "High Magnitudes and Geometric Attenuation"),
-        cex.main=0.8, axes=FALSE, nlevels=levs,
-        lwd=2, labcex=0.8, vfont=c("sans serif", "bold italic"))
-axisIntervals(1, atTick1=ext.ticks, atTick2=NA,
-              atLabels=xticks,
-              labels=10^xticks )
-axisIntervals(2, atTick1=ext.ticks, atTick2=NA,
-              atLabels=xticks,
-              labels=10^xticks)
-dev.off()
-
-pdf(file = "output/images/supplementary/lowmag-and-geom.pdf", width = 4, height = 4)
-contour(t.points, t.points, cor.mat.26,
-        xlab="Low Magnitudes",
-        ylab="Geometric Attenuation",
-        main=paste("(c) Correlation across periods for\n",
-                   "Low Magnitudes and Geometric Attenuation"),
-        cex.main=0.8, axes=FALSE, nlevels=levs,
-        lwd=2, labcex=0.8, vfont=c("sans serif", "bold italic"))
-axisIntervals(1, atTick1=ext.ticks, atTick2=NA,
-              atLabels=xticks,
-              labels=10^xticks )
-axisIntervals(2, atTick1=ext.ticks, atTick2=NA,
-              atLabels=xticks,
-              labels=10^xticks)
-dev.off()
-
-pdf(file = "output/images/supplementary/lowmag-and-highmag.pdf", width = 4, height = 4)
-contour(t.points, t.points, cor.mat.23,
-        xlab="Low Magnitudes",
-        ylab="High Magnitudes",
-        main=paste("(b) Correlation across periods for\n",
-                   "Low and High Magnitudes"),
-        cex.main=0.8, axes=FALSE, nlevels=levs,
-        lwd=2, labcex=0.8, vfont=c("sans serif", "bold italic"))
-axisIntervals(1, atTick1=ext.ticks, atTick2=NA,
-              atLabels=xticks,
-              labels=10^xticks )
-axisIntervals(2, atTick1=ext.ticks, atTick2=NA,
-              atLabels=xticks,
-              labels=10^xticks)
-dev.off()
-
+{
+  pdf(file = "output/images/supplementary/geom-and-anel.pdf", width = 4, height = 4)
+  contour(t.points, t.points, cor.mat.78,
+          xlab="Geometric Attenuation",
+          ylab="Anelastic Attenuation",
+          #color.palette = function(n) hcl.colors(n, "RdYlBu", rev = TRUE),
+          main=paste("(a) Correlation across periods for\n",
+                     "Geometric and Anelastic Attenuation"),
+          cex.main=0.8, axes=FALSE, nlevels = levs,
+          lwd=2, labcex=0.8, vfont=c("sans serif", "bold italic"))
+  axisIntervals(1, atTick1=ext.ticks, atTick2=NA,
+                atLabels=xticks,
+                labels=10^xticks )
+  axisIntervals(2, atTick1=ext.ticks, atTick2=NA,
+                atLabels=xticks,
+                labels=10^xticks )
+  dev.off()
+  
+  pdf(file = "output/images/supplementary/highmag-and-geom.pdf", width = 4, height = 4)
+  contour(t.points, t.points, cor.mat.36,
+          xlab="High Magnitudes",
+          ylab="Geometric Attenuation",
+          main=paste("(d) Correlation across periods for\n",
+                     "High Magnitudes and Geometric Attenuation"),
+          cex.main=0.8, axes=FALSE, nlevels=levs,
+          lwd=2, labcex=0.8, vfont=c("sans serif", "bold italic"))
+  axisIntervals(1, atTick1=ext.ticks, atTick2=NA,
+                atLabels=xticks,
+                labels=10^xticks )
+  axisIntervals(2, atTick1=ext.ticks, atTick2=NA,
+                atLabels=xticks,
+                labels=10^xticks)
+  dev.off()
+  
+  pdf(file = "output/images/supplementary/lowmag-and-geom.pdf", width = 4, height = 4)
+  contour(t.points, t.points, cor.mat.26,
+          xlab="Low Magnitudes",
+          ylab="Geometric Attenuation",
+          main=paste("(c) Correlation across periods for\n",
+                     "Low Magnitudes and Geometric Attenuation"),
+          cex.main=0.8, axes=FALSE, nlevels=levs,
+          lwd=2, labcex=0.8, vfont=c("sans serif", "bold italic"))
+  axisIntervals(1, atTick1=ext.ticks, atTick2=NA,
+                atLabels=xticks,
+                labels=10^xticks )
+  axisIntervals(2, atTick1=ext.ticks, atTick2=NA,
+                atLabels=xticks,
+                labels=10^xticks)
+  dev.off()
+  
+  pdf(file = "output/images/supplementary/lowmag-and-highmag.pdf", width = 4, height = 4)
+  contour(t.points, t.points, cor.mat.23,
+          xlab="Low Magnitudes",
+          ylab="High Magnitudes",
+          main=paste("(b) Correlation across periods for\n",
+                     "Low and High Magnitudes"),
+          cex.main=0.8, axes=FALSE, nlevels=levs,
+          lwd=2, labcex=0.8, vfont=c("sans serif", "bold italic"))
+  axisIntervals(1, atTick1=ext.ticks, atTick2=NA,
+                atLabels=xticks,
+                labels=10^xticks )
+  axisIntervals(2, atTick1=ext.ticks, atTick2=NA,
+                atLabels=xticks,
+                labels=10^xticks)
+  dev.off()
+}
 

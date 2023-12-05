@@ -1,4 +1,3 @@
-setwd('~/Documents/R/WFDA')
 
 library(fda)
 library(fdakma)
@@ -436,6 +435,12 @@ save(MSE, beta0.est, beta1.est, beta2.est, file=name.file)
 
 
 ## Plot results -------------------------------------------------------
+#' With the followig chunks of code, we are replicating Figure 4 of the
+#' manuscript (a and b), and the values of bias^2 entering Table 1 of the
+#' manuscript. Specifically, Subsection MSE of this script reproduces
+#' Figure 4a, Subsection Variance reproduces Figure 4b, and Subsection bias^2
+#' reproduces the values in Table 1
+
 beta0 <- reg.info$beta_estimates[[1]]$fd
 beta0$coefs <- beta0$coefs/3 
 beta1 <- reg.info$beta_estimates[[2]]$fd
@@ -1087,5 +1092,6 @@ bias2   <- numeric(3*levs)
   mean.diff <- mean0 - beta2
   bias2[idxs] <- inprod(mean.diff, mean.diff, 0, 0, rng=range(t.points))
   
+  bias2
+  
 }
-bias2
