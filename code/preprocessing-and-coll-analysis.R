@@ -20,6 +20,9 @@ library(ggplot2)
 library(ggcorrplot)
 library(reshape2)
 
+#' We recommend users to take advantage of the Outline tool available in R, in
+#' order to move easily in the script.
+
 
 ## PREPROCESSING ---------------------------------------------------------------
 

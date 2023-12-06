@@ -20,6 +20,9 @@ rm(list=ls())
 graphics.off()
 cat("\014")
 
+#' We recommend users to take advantage of the Outline tool available in R, in
+#' order to move easily in the script.
+
 ## Load Functions
 source('code/functions/weighted-analysis.R')
 source('code/functions/generate-data.R')
@@ -577,7 +580,7 @@ save(MSE, beta0.est, beta1.est, beta2.est, file=name.file)
 
 
 ## Plot results -------------------------------------------------------
-#' With the followig chunks of code, we are replicating Figure 2 (a and b) and
+#' With the following chunks of code, we are replicating Figure 2 (a and b) and
 #' Figure 3 (a and b) of the Supplementary Material. Specifically, Subsection MSE
 #' of this script reproduces Figure 2a, Subsection Variance reproduces Figure 2b,
 #' Subsection [0,1.75] reproduces 3a, and Subsection [1.75,3] reproduces 3b.

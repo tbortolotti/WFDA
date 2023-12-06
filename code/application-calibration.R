@@ -17,6 +17,9 @@ rm(list=ls())
 graphics.off()
 cat("\014")
 
+#' We recommend users to take advantage of the Outline tool available in R, in
+#' order to move easily in the script.
+
 ## Load Data
 load('output/preprocessed-data/xlist-logg.RData')
 load('output/preprocessed-data/data.RData')
@@ -36,6 +39,12 @@ t.points[1]  <- -2.5
 breaks       <- t.points
 
 ## Selection of the penalization parameters ------------------------------------
+#' In the following, we employ the evolutionary algorithm for parameter selection
+#' discussed in Centofanti et al. (2023). The results of this analysis are discussed
+#' extensively in Section 3.2 of the Supplementary Material and reported in
+#' Table 1 of the Supplementary Material.
+#' (see line 240 of this script)
+
 ## Maintain only the fully observed curves
 curves.full <- curves[,-reconst_fcts]
 event.id    <- event.id[-reconst_fcts]
@@ -229,6 +238,8 @@ if(calibrate){
   
   best <- which(V.full==min(V.full))
   lambda.opt <- P.full[best,]
+  
+  #' lambda.opt contains the values reported in Table 1 of the Supplementary Material.
   lambda.opt
   blist <- blist.default
   for(reg in 1:n.par){
@@ -241,6 +252,12 @@ if(calibrate){
 
 ## Selection of the weights ----------------------------------------------------
 #' Via event-wise cross-validation
+#' 
+#' In the following, for each weighting system, we evaluate the point-wise mean
+#' squared error via event-wise cross-validation. The weights corresponding to the
+#' lowest event-wise cv-error are selected in the remaining of the analysis. The results
+#' of this analysis are reported in Table 2 of the Manuscript
+#' (Subsection Selection of the weights: Show results of this script).
 #' 
 load('output/calibration/blist_EAASS_multistart.RData')
 
@@ -340,6 +357,8 @@ beep()
 save(vec.par, MSE_cv, MSE_glob.list, file='output/calibration/MSE_wgts.RData')
 
 #### Show results --------------------------------------------------------------
+#' The values printed here are those reported in Table 2 of the Manuscript
+
 load('output/calibration/MSE_nowgts.RData')
 m_0 <- round(mean(unlist(lapply(MSE_glob.list[[1]], mean))), digits=4)
 s_0 <- round(sd(unlist(lapply(MSE_glob.list[[1]], mean))), digits=4)
@@ -359,6 +378,15 @@ print(paste0("0-weights", " MSE = ", m_0, " sd = ", s_0))
 
 ## Selection of the reconstruction method --------------------------------------
 #' Via event-wise cross-validation
+#' 
+#' In the following, for each reconstruction method, we evaluate the point-wise mean
+#' squared error via event-wise cross-validation. The reconstruction method corresponding
+#' to the lowest event-wise cv-error are selected in the remaining of the analysis.
+#' The results of this analysis are discussed in Section 5.1 of the Manuscript, paragraph
+#' "Selection of the reconstruction method".
+#' In particular, the results are displayed at the last subsection of this script's Section:
+#' Selection of the reconstruction method: Show results.
+#' 
 load('output/calibration/blist_EAASS_multistart.RData')
 
 t.points    <- log10(T.period)
@@ -406,6 +434,9 @@ beep()
 save(MSE_cv, MSE_glob.list, file='output/calibration/MSE_extrap.RData')
 
 #### Show results --------------------------------------------------------------
+#' The results of this analysis are discussed in Section 5.1 of the Manuscript, paragraph
+#' "Selection of the reconstruction method".
+
 # Extrapolation
 load('output/calibration/MSE_extrap.RData')
 m_0 <- round(mean(unlist(lapply(MSE_glob.list[[1]], mean))), digits=5)

@@ -19,6 +19,9 @@ rm(list=ls())
 graphics.off()
 cat("\014")
 
+#' We recommend users to take advantage of the Outline tool available in R, in
+#' order to move easily in the script.
+
 ## Load Data ---------------------------------------------------------------
 load('output/preprocessed-data/xlist-logg.RData')
 load('output/preprocessed-data/data.RData')
@@ -122,7 +125,9 @@ y.hat.ITA18 <- scalar.ITA18$y.hat.ITA18
 
 save(coefs.ITA18, file="output/application/coefs_ITA18.RData")
 
-## Plot MSE and sigma comparison
+## Plot sigma comparison
+#' Function plot_sigma produces the plot of the point-wise residual standard
+#' deviation sigma_hat reported in Figure 8 of the Manuscript.
 load('output/application/pw_MSE_Sigma.RData')
 
 name_dir     <- paste0("output/images/model-comparison")
@@ -134,6 +139,7 @@ plot_sigma(sigma.t     = pw_MSE_Sigma.val$Sigma_t,
 
 
 ## Bootstrap sample of the functional coefficients -----------------------------
+#' Generation of the bootstrap sample for each functional coefficient
 ## Preprocessing
 extrapolate   <- extrapolation(curves       = curves,
                                t.points     = T.period,
@@ -212,6 +218,13 @@ save(B.list, mod, n, q, L, N, T.period, file='output/application/bootstrap_resul
 
 
 ## PLOTS ------------------------------------------------------------------------------
+#' The script that follows allows one to get a representation of the functional boxplots
+#' of the bootstrap samples generated above. For each functional coefficient, we plot
+#' the boxplot of its bootstrap sample, the point estimate obtained with the functional
+#' weighted methodology (F-ITA18) and the point estimate obtained with the scalar methodology
+#' (ITA18). The resulting plots are collected in Figure 7 of the Manuscript, and in Figure
+#' 5 of the Supplementary Material.
+#' 
 load("output/application/coefs_ITA18.RData")
 a0      <- coefs.ITA18$a0
 b1      <- coefs.ITA18$b1

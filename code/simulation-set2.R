@@ -20,6 +20,9 @@ rm(list=ls())
 graphics.off()
 cat("\014")
 
+#' We recommend users to take advantage of the Outline tool available in R, in
+#' order to move easily in the script.
+
 ## Load Functions
 source('code/functions/weighted-analysis.R')
 source('code/functions/generate-data.R')
